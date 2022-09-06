@@ -1,5 +1,6 @@
 import 'package:example/demo/custom_segment.dart';
 import 'package:example/demo/foreground_background.dart';
+import 'package:example/demo/mask_segment.dart';
 import 'package:example/demo/page_segment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class _HomePageState extends State<HomePage> {
             _listItem('Custom Segment', (context) => const CustomSegment()),
             _listItem('Foreground Indicator',
                 (context) => const ForegroundBackground()),
+            _listItem('Mask Segment', (context) => const MaskSegment()),
           ],
         ),
       ),

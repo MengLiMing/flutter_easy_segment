@@ -1,9 +1,15 @@
 part of flutter_easy_segment;
 
+abstract class EasySegmentIndicatorWidgetMixin {
+  final ValueSetter<RenderObject>? layoutChanged;
+
+  EasySegmentIndicatorWidgetMixin({required this.layoutChanged});
+}
+
 /// 自定义指示器
-mixin EasySegmentIndicatorMixin<T extends StatefulWidget>
+mixin EasySegmentIndicatorStateMixin<T extends StatefulWidget>
     on
-        EasySegmentIndicatorStateMixin<T>,
+        EasySegmentIndicatorIndexMixin<T>,
         EasySegmentControllerProviderStateMixin<T> {
   void update(EasyIndicatorLayoutConfig config) {
     final position = this.position;
@@ -11,7 +17,6 @@ mixin EasySegmentIndicatorMixin<T extends StatefulWidget>
     switch (position) {
       case _EasySegmentIndicatorPosition.background:
         controller?._indicatorConfig(itemIndex).value = config;
-
         break;
       case _EasySegmentIndicatorPosition.foreground:
         controller?._foregroundIndicatorConfig(itemIndex).value = config;
@@ -86,7 +91,7 @@ class _EasySegmentIndicatorConfig extends InheritedWidget {
   }
 }
 
-mixin EasySegmentIndicatorStateMixin<T extends StatefulWidget> on State<T> {
+mixin EasySegmentIndicatorIndexMixin<T extends StatefulWidget> on State<T> {
   int get itemIndex => mounted
       ? (_EasySegmentIndicatorConfig.indicatorIndex(context) ?? -1)
       : -1;

@@ -18,6 +18,9 @@ class EasySegment extends StatefulWidget {
 
   final ValueChanged<int>? onTap;
 
+  /// 前置widget
+  final Widget? foreground;
+
   const EasySegment({
     Key? key,
     this.space = 10,
@@ -27,6 +30,7 @@ class EasySegment extends StatefulWidget {
     this.indicators = const [],
     this.foregroundIndicators = const [],
     this.onTap,
+    this.foreground,
   }) : super(key: key);
 
   @override
@@ -175,13 +179,21 @@ class _EasySegmentState extends State<EasySegment>
               ValueListenableBuilder<EasyIndicatorLayoutConfig>(
                 valueListenable: segController._indicatorConfig(i),
                 builder: (context, config, child) {
-                  return Positioned(
+                  return LayoutChangedPositioned(
                     left: config.left,
                     width: config.width,
                     height: config.height,
                     bottom: config.bottom,
                     top: config.top,
                     child: child!,
+                    handler: (renderObject) {
+                      final indicator = widget.indicators[i];
+                      if (indicator is EasySegmentIndicatorWidgetMixin) {
+                        (indicator as EasySegmentIndicatorWidgetMixin)
+                            .layoutChanged
+                            ?.call(renderObject);
+                      }
+                    },
                   );
                 },
                 child: _EasySegmentIndicatorConfig(
@@ -219,6 +231,10 @@ class _EasySegmentState extends State<EasySegment>
                           parentDataOffset.dx + widget.padding.left,
                           parentDataOffset.dy + widget.padding.top,
                         );
+                        // final offset = renderBox.localToGlobal(
+                        //   Offset.zero,
+                        //   ancestor: context.findRenderObject(),
+                        // );
                         final size = renderBox.size;
                         widget.controller._configData(
                           i,
@@ -238,13 +254,21 @@ class _EasySegmentState extends State<EasySegment>
               ValueListenableBuilder<EasyIndicatorLayoutConfig>(
                 valueListenable: segController._foregroundIndicatorConfig(i),
                 builder: (context, config, child) {
-                  return Positioned(
+                  return LayoutChangedPositioned(
                     left: config.left,
                     width: config.width,
                     height: config.height,
                     bottom: config.bottom,
                     top: config.top,
                     child: child!,
+                    handler: (renderObject) {
+                      final indicator = widget.indicators[i];
+                      if (indicator is EasySegmentIndicatorWidgetMixin) {
+                        (indicator as EasySegmentIndicatorWidgetMixin)
+                            .layoutChanged
+                            ?.call(renderObject);
+                      }
+                    },
                   );
                 },
                 child: _EasySegmentIndicatorConfig(
@@ -253,6 +277,7 @@ class _EasySegmentState extends State<EasySegment>
                   child: widget.foregroundIndicators[i],
                 ),
               ),
+            Container(child: widget.foreground),
           ],
         ),
       ),

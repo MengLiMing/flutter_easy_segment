@@ -1,7 +1,8 @@
 part of flutter_easy_segment;
 
 /// 本来是想提供多种动画，但是~ 起名字太难了，还好自定义很简单-,-，所以我就只实现一种抱砖引玉吧。
-class CustomSegmentLineIndicator extends StatefulWidget {
+class CustomSegmentLineIndicator extends StatefulWidget
+    implements EasySegmentIndicatorWidgetMixin {
   final double? bottom;
   final double? height;
   final double? top;
@@ -25,6 +26,9 @@ class CustomSegmentLineIndicator extends StatefulWidget {
 
   final Curve curve;
 
+  @override
+  final ValueSetter<RenderObject>? layoutChanged;
+
   const CustomSegmentLineIndicator({
     Key? key,
     this.color,
@@ -38,6 +42,7 @@ class CustomSegmentLineIndicator extends StatefulWidget {
     this.child,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeInOut,
+    this.layoutChanged,
   })  : assert(top == null || bottom == null || height == null),
         assert(decoration == null || (borderRadius == null && color == null)),
         super(key: key);
@@ -50,8 +55,8 @@ class CustomSegmentLineIndicator extends StatefulWidget {
 class _CustomSegmentLineIndicatorState extends State<CustomSegmentLineIndicator>
     with
         EasySegmentControllerProviderStateMixin,
+        EasySegmentIndicatorIndexMixin,
         EasySegmentIndicatorStateMixin,
-        EasySegmentIndicatorMixin,
         SingleTickerProviderStateMixin {
   late AnimationController animationController;
 
